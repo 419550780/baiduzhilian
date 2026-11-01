@@ -1,0 +1,54 @@
+baidu: &baidu
+   type: http
+   port: 443
+   headers:
+     X-T5-Auth: 683556433
+     Host: 153.3.236.22:443
+ding: &ding
+   type: http
+   port: 443
+   headers:
+     X-T5-Auth: 683556433
+     Host: 153.3.236.22:443
+     With-At: gw.alicdn.com
+cai: &cai
+   type: http
+   port: 443
+   headers:
+     X-T5-Auth: 683556433
+     Host: 153.3.236.22:443
+     With-At: mmsc.vnet.mobi
+     dialer-proxy: 电信彩信静态⑤
+proxies:
+ - name: 百度直连动态①
+   server: cloudnproxy.baidu.com
+   <<: *baidu
+ - name: 百度直连动态②
+   server: cloudnproxy.n.shifen.com
+   <<: *baidu
+ - name: 钉钉直连动态③
+   server: cloudnproxy.baidu.com
+   <<: *ding
+ - name: 电信彩信动态④
+   server: cloudnproxy.baidu.com
+   <<: *cai
+ - name: 电信彩信静态⑤
+   server: 10.0.0.200
+   type: http
+   port: 80
+   headers:
+     Host: mmsc.vnet.mobi
+     With-At: mmsc.vnet.mobi
+proxy-groups:
+ - name: 百度直连
+   icon: "https://v6.gh-proxy.org/https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Baidu_02.png"
+   type: select
+   proxies:
+     - 百度直连动态①
+     - 百度直连动态②
+     - 钉钉直连动态③
+     - 电信彩信动态④
+     - 电信彩信静态⑤
+rules:
+ - DOMAIN-KEYWORD,ingest.sentry,REJECT
+ - MATCH,百度直连
